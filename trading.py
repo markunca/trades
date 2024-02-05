@@ -1,10 +1,10 @@
 # trading.py
 import ccxt
 from datetime import datetime
-from .config import *
-from .database import get_trade, record_trade
-from .indicators import calculate_indicators
-from .utils import fetch_data
+from config import *
+from database import get_trade, record_trade
+from indicators import calculate_indicators
+from utils import fetch_data
 import logging  # Import the logging module
 
 binance = ccxt.binance({
