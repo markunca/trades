@@ -2,7 +2,7 @@
 API_KEY = 'XXX'
 SECRET_KEY = 'XXX'
 TIMEFRAME = '15m'
-TIMEFRAME_IN_HOURS = '0.25'
+TIMEFRAME_IN_HOURS = 0.25
 SINCE_PERIOD = '4 days ago UTC'
 LOOKBACK_PERIOD = 96  # Lookback period in terms of number of candlesticks
 RSI_THRESHOLD = 28
