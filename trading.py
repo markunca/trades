@@ -35,7 +35,7 @@ def trade_currency(symbol):
         since_timestamp = binance.parse8601(since_period.strftime('%Y-%m-%dT%H:%M:%SZ'))
 
         # Fetch and process data
-        df = fetch_data(symbol, TIMEFRAME, binance.parse8601(SINCE_PERIOD))
+        df = fetch_data(symbol, TIMEFRAME, binance.parse8601(since_timestamp))
         df = calculate_indicators(df)
         last_row = df.iloc[-1]
 
