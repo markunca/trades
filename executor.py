@@ -2,9 +2,9 @@ import subprocess
 import time
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from .config import SYMBOLS
-from .database import init_db
-from .trading import trade_currency
+from config import SYMBOLS
+from database import init_db
+from trading import trade_currency
 
 # Initialize a logger for the executor
 logger = logging.getLogger(__name__)
