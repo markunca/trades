@@ -3,6 +3,7 @@ API_KEY = 'XXX'
 SECRET_KEY = 'XXX'
 TIMEFRAME = '15m'
 SINCE_PERIOD = '4 days ago UTC'
+LOOKBACK_PERIOD = 96  # Lookback period in terms of number of candlesticks
 RSI_THRESHOLD = 28
 STOCH_RSI_THRESHOLD = 20
 LOOKBACK_PERIOD = 96
