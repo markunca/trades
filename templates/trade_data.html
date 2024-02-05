@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trade Data</title>
+    <!-- Add Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Trade Data</h1>
+    
+    <!-- Iterate over available cryptocurrencies and generate charts -->
+    {% for currency in available_currencies %}
+    <h2>{{ currency.name }}</h2>
+    <canvas id="{{ currency.symbol }}Chart" width="400" height="200"></canvas>
+
+    <script>
+        var {{ currency.symbol }}Data = {{ currency.data|tojson|safe }};  // Pass data from Flask to JavaScript
+
+        // Extract data for the chart
+        var {{ currency.symbol }}Labels = {{ currency.data|tojson|safe }}.map(function(trade) {
+            return trade.purchase_time;
+        });
+
+        var {{ currency.symbol }}Prices = {{ currency.data|tojson|safe }}.map(function(trade) {
+            return trade.purchase_price;
+        });
+
+        // Create a chart using Chart.js
+        var {{ currency.symbol }}Ctx = document.getElementById('{{ currency.symbol }}Chart').getContext('2d');
+        var {{ currency.symbol }}Chart = new Chart({{ currency.symbol }}Ctx, {
+            type: 'line',
+            data: {
+                labels: {{ currency.symbol }}Labels,
+                datasets: [{
+                    label: 'Purchase Price',
+                    data: {{ currency.symbol }}Prices,
+                    borderColor: 'blue',
+                    borderWidth: 1,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            displayFormats: {
+                                hour: 'MMM D, HH:mm'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Purchase Time'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Purchase Price'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    {% endfor %}
+</body>
+</html>
