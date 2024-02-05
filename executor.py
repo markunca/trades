@@ -25,7 +25,7 @@ logger.addHandler(file_handler)
 def start_flask_app():
     try:
         # Specify the command to run your Flask application (update paths as needed)
-        flask_command = ["python", "/path/to/app.py"]
+        flask_command = ["python", "app.py"]
 
         # Start the Flask application as a separate process
         flask_process = subprocess.Popen(flask_command)
