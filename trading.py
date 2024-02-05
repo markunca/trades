@@ -30,10 +30,16 @@ logger.addHandler(file_handler)
 
 def trade_currency(symbol):
     try:
+        # Dynamically calculate 'since_period' for data fetching
+        since_period = datetime.utcnow() - timedelta(hours=LOOKBACK_PERIOD * TIMEFRAME_IN_HOURS)
+        since_timestamp = binance.parse8601(since_period.strftime('%Y-%m-%dT%H:%M:%SZ'))
+
+        # Fetch and process data
         df = fetch_data(symbol, TIMEFRAME, binance.parse8601(SINCE_PERIOD))
         df = calculate_indicators(df)
         last_row = df.iloc[-1]
 
+        # Trading logic
         trade = get_trade(symbol)
         if not trade:
             if last_row['RSI'] < RSI_THRESHOLD and last_row['stoch_rsi'] < STOCH_RSI_THRESHOLD and last_row['close'] < last_row['daily_avg']:
