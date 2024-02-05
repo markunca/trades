@@ -1,6 +1,6 @@
 # trading.py
 import ccxt
-from datetime import datetime
+from datetime import datetime, timedelta
 from config import *
 from database import get_trade, record_trade
 from indicators import calculate_indicators
