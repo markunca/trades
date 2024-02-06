@@ -4,7 +4,7 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from config import SYMBOLS
 from database import init_db
-from trading import trade_currency
+from trading import run_trading_cycle
 
 # Initialize a logger for the executor
 logger = logging.getLogger(__name__)
@@ -49,7 +49,7 @@ def execute_trades():
 
         # Trading bot logic using ThreadPoolExecutor
         with ThreadPoolExecutor(max_workers=len(SYMBOLS)) as executor:
-            futures = {executor.submit(trade_currency, symbol): symbol for symbol in SYMBOLS}
+            futures = {executor.submit(run_trade_currency, symbol): symbol for symbol in SYMBOLS}
             for future in as_completed(futures):
                 symbol = futures[future]
                 try:
