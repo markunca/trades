@@ -38,14 +38,7 @@ Before you begin, ensure you have met the following requirements:
 
 1. Clone the repository to your local machine using the following command:
 
-   ```bash
-   git clone https://github.com/yourusername/yourrepository.git
-
 ### Navigate to the project directory using the command
-
-   "```bash
-   cd yourrepository"
-
 ### Navigate to the project directory using the command
 ### Use pip to install the required packages listed in requirements.txt. Run the following command
 
