@@ -21,39 +21,39 @@ exchange = ccxt.binance({
 
 def execute_trade(symbol, df):
     """
-    Execute a trade based on calculated indicators from indicators.py.
+    Execute a trade based on calculated indicators.
     :param symbol: Symbol to trade.
     :param df: DataFrame with indicators and price data.
     """
     last_row = df.iloc[-1]
     last_trade = get_trade(symbol)
 
-    # Define buy/sell conditions based on indicators.py logic
-    buy_condition = last_row['RSI'] < df['RSI'].mean() - df['RSI'].std() and (last_trade is None or last_trade['type'] == 'sell')
-    sell_condition = last_row['RSI'] > df['RSI'].mean() + df['RSI'].std() and last_trade and last_trade['type'] == 'buy'
+    # Define buy/sell conditions based on the indicators' logic
+    buy_condition = last_row['RSI'] < 30  # Example buy condition based on RSI
+    sell_condition = last_row['RSI'] > 70  # Example sell condition based on RSI
 
-    if buy_condition:
+    if buy_condition and (last_trade is None or last_trade['type'] == 'sell'):
         logger.info(f"Buy signal for {symbol}")
         # Uncomment to execute a buy order on Binance
-        # exchange.create_market_buy_order(symbol, amount)
+        # exchange.create_market_buy_order(symbol, calculated_amount)
         record_trade(symbol, 'buy', last_row['close'], datetime.now())
-    elif sell_condition:
+    elif sell_condition and last_trade and last_trade['type'] == 'buy':
         logger.info(f"Sell signal for {symbol}")
         # Uncomment to execute a sell order on Binance
-        # exchange.create_market_sell_order(symbol, amount)
+        # exchange.create_market_sell_order(symbol, calculated_amount)
         update_trade(last_trade['id'], 'sell', last_row['close'], datetime.now())
 
 def run_trading_cycle():
-    for symbol in SYMBOLS:
-        logger.info(f"Analyzing {symbol} for trading opportunities")
-        selected_symbol = currency_selection.select_currency(exchange, [symbol])
+    top_symbols = currency_selection.get_top_currencies(exchange)  # Get top currencies based on volume
+    selected_symbol = currency_selection.select_currency(exchange, top_symbols)  # Select the best currency
 
-        if selected_symbol:
-            data = fetch_data(selected_symbol, TIMEFRAME, datetime.now() - timedelta(days=LOOKBACK_PERIOD))
-            df = calculate_indicators(pd.DataFrame(data, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume']))
-            execute_trade(selected_symbol, df)
-        else:
-            logger.info(f"No suitable currency found for trading in this cycle for {symbol}.")
+    if selected_symbol:
+        logger.info(f"Selected currency for trading: {selected_symbol}")
+        data = fetch_data(selected_symbol, TIMEFRAME, datetime.now() - timedelta(days=LOOKBACK_PERIOD))
+        df = calculate_indicators(pd.DataFrame(data, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume']))
+        execute_trade(selected_symbol, df)
+    else:
+        logger.info("No suitable currency found for trading in this cycle.")
 
 if __name__ == '__main__':
     run_trading_cycle()
